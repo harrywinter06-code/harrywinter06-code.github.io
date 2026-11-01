@@ -14,7 +14,7 @@ Harry Winter studies BSc Information Management for Business at University Colle
 
 ### What projects has Harry Winter built?
 
-Harry Winter's projects include an autonomous algorithmic trading system that evolves strategies with a genetic algorithm and paper-trades on Alpaca; polymarket-edge, a Polymarket and Hyperliquid market research toolkit; clustertrace, an open-source debugger for LLM agents published on PyPI; and gina-starter-pack, a set of Polymarket strategy workflows.
+Harry Winter's projects include an autonomous algorithmic trading system that evolves strategies with a genetic algorithm and paper-trades on Alpaca; polymarket-edge, a Polymarket and Hyperliquid market research toolkit; clustertrace, an open-source debugger for LLM agents published on PyPI; and gina-starter-pack, a set of Polymarket strategy workflows. He also writes up his findings, such as why most Polymarket arbitrage signals are traps.
 
 ### Is Harry Winter looking for work?
 
@@ -172,4 +172,78 @@ Pack 1 went through seven validation passes, including an adversarial red-team t
 Depth-walking showed that a +300bp top-of-book gap shrank to +60bp at realistic size, and taker-side P&L per cycle was negative. Only passive, maker-side execution made economic sense.
 
 Built with: TypeScript, Ask Gina workflow runtime, SQLite, Python, Polymarket CLOB API.
+
+## Most of the Polymarket arbitrage I found was a trap (article by Harry Winter, 2026-11-01)
+
+URL: https://harrywinter06-code.github.io/writing/polymarket-arbitrage-traps/
+
+I scanned 500 Polymarket events for arbitrage. 12 of the 19 signals were traps that lose money at just $50 a market, and every one of them was a US politics or election market.
+
+Polymarket has events with several mutually exclusive outcomes, like “who wins the World Cup”. Exactly one outcome resolves YES, so the YES prices across all of them should add up to $1. When they don’t, it looks like free money: buy or sell the whole basket and lock in the difference.
+
+I built a scanner for this as part of polymarket-edge. The first version only looked at the best price on each market. It found plenty of gaps. Then I checked whether you could actually trade them.
+
+### How I tested it
+
+I pulled 500 active events and flagged any whose prices were more than 0.5% (50 basis points) away from $1, which is roughly where fees stop eating the profit. 19 events were flagged. For each one I walked the full order book on every market, and worked out what the gap would really be if you traded $50 per market, and then $500 per market.
+
+- Real: the gap is still above 0.5% at $500 per market.
+- Marginal: still positive at $50, but gone by $500.
+- Trap: the gap turns into a loss at just $50 per market, because at least one market has almost no one on the other side.
+
+### What I found
+
+Of the 19 flagged events, 2 were real, 5 were marginal and 12 were traps. That’s a 63% trap rate.
+
+The traps weren’t random. Almost every flagged US politics or election event was a trap: 11 of 13. These tend to be two-market state races with very lopsided prices, where the cheap side has almost no depth. They produce the biggest-looking gaps, and they’re the ones you can’t trade.
+
+The two real signals were the 48-market 2026 FIFA World Cup winner event and the 20-market Nobel Peace Prize event. Both have liquidity spread across lots of markets, so the gap survives when you trade at size. On the World Cup event, the gap held up through roughly $48,000 of total basket size.
+
+### Counting by dollars changes the story
+
+63% sounds bad. But if you weight each flagged event by how much money is actually traded on it, the trap share drops to about 0.012%. The World Cup event alone carried 95.9% of the flagged volume. So most signals are traps, but most of the money is in a signal that’s real.
+
+### What I took from it
+
+- A price-only scanner is good at finding candidates and bad at finding trades. Walking the order book isn’t optional.
+- A gap on a two-market US state election is almost certainly a trap.
+- How you count matters. “63% traps” and “0.012% traps” are the same data.
+
+This was one snapshot, and order books move hourly, so the exact 63% will drift. The pattern, that thin two-market political events are where the traps live, looks structural. The code and the full write-up are on GitHub.
+
+## My 10% funding-rate strategy loses money after trading costs (article by Harry Winter, 2026-11-01)
+
+URL: https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/
+
+A Hyperliquid funding strategy made +10% a year out-of-sample and was positive in every test window. With realistic trading costs and 8-hourly rebalancing it lost 207% a year. Here's what made it work again.
+
+On crypto perpetual futures exchanges like Hyperliquid, traders on one side pay the other a “funding rate” every hour. When it’s positive, people who are short get paid. So a simple idea: short the coins with the highest funding, hedge the price risk, and collect the payments.
+
+I backtested this as part of polymarket-edge on 12 major coins over a year of hourly data: 105,120 funding ticks.
+
+### The headline looked great
+
+Every 8 hours, the strategy ranks coins by their average funding over the last day and shorts the top 5. Before costs:
+
+- +11.09% a year in-sample and +10.06% out-of-sample, so very little decay
+- Positive in 20 of 20 walk-forward test windows
+- A block-bootstrap 95% confidence interval of +9.78% to +13.59%, comfortably above zero
+
+I used a block bootstrap rather than a plain one because funding payments are autocorrelated. The plain version gave a much tighter, over-confident interval.
+
+### Then I added trading costs
+
+Rebalancing means trading the short and its hedge each time. At a realistic 5 basis points per leg, rebalancing every 8 hours turns +10% into −207% a year. The costs are paid three times a day; the funding edge isn’t big enough to cover them.
+
+The fix is to trade less. Rebalancing every two weeks brings it back to +3.85% a year after costs, and monthly gives +4.87%. The edge is real, but small, and it only survives if you’re patient.
+
+### Things that didn’t hold up
+
+- “20 of 20 windows” overstates it. The test windows overlap, so it’s closer to 10 independent tests.
+- About 7.7 percentage points of the return is just the baseline funding rate any short collects. Picking coins only added about 3.8 points.
+- Ranking coins by how fast funding was rising instead of how high it was did worse: +8.0% versus +17.2% on the same data.
+
+### What I took from it
+
+A backtest without costs tells you whether a signal exists, not whether you can make money from it. Most of the useful work here was finding out why the good-looking number was wrong. The code is on GitHub.
 

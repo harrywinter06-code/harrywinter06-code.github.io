@@ -23,6 +23,11 @@
 - [polymarket-edge](https://harrywinter06-code.github.io/projects/polymarket-edge/): Harry Winter's Polymarket negRisk arbitrage scanner and Hyperliquid funding backtest, with depth-aware fills, walk-forward tests and bootstrap CIs. Code: https://github.com/harrywinter06-code/polymarket-edge
 - [gina-starter-pack](https://harrywinter06-code.github.io/projects/gina-starter-pack/): Harry Winter's three Polymarket negRisk strategy packs for Ask Gina: basket arbitrage, maker yield and a longshot-bias study, with risk-gated executors. Code: https://github.com/harrywinter06-code/gina-starter-pack
 
+## Writing
+
+- [Most of the Polymarket arbitrage I found was a trap](https://harrywinter06-code.github.io/writing/polymarket-arbitrage-traps/): I scanned 500 Polymarket events for arbitrage. 12 of the 19 signals were traps that lose money at just $50 a market, and every one of them was a US politics or election market.
+- [My 10% funding-rate strategy loses money after trading costs](https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/): A Hyperliquid funding strategy made +10% a year out-of-sample and was positive in every test window. With realistic trading costs and 8-hourly rebalancing it lost 207% a year. Here's what made it work again.
+
 ## Optional
 
 - [Full text of every page](https://harrywinter06-code.github.io/llms-full.txt)

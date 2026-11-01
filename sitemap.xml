@@ -30,4 +30,16 @@
     <priority>0.8</priority>
     <image:image><image:loc>https://harrywinter06-code.github.io/harry-winter.jpg</image:loc><image:title>Harry Winter</image:title><image:caption>Harry Winter, UCL student, London</image:caption></image:image>
   </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/writing/polymarket-arbitrage-traps/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://harrywinter06-code.github.io/harry-winter.jpg</image:loc><image:title>Harry Winter</image:title><image:caption>Harry Winter, UCL student, London</image:caption></image:image>
+  </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://harrywinter06-code.github.io/harry-winter.jpg</image:loc><image:title>Harry Winter</image:title><image:caption>Harry Winter, UCL student, London</image:caption></image:image>
+  </url>
 </urlset>

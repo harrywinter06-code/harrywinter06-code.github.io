@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-site-verification" content="IN58JlY0TMIs5u1BTdAQgzycmwXVi_8bx57BGI0jHlM" />
+  <title>A 10% Funding-Rate Backtest That Loses Money | Harry Winter</title>
+  <meta name="description" content="Harry Winter&#x27;s Hyperliquid funding-rate backtest made +10% a year out-of-sample, then turned deeply negative once realistic trading costs were added.">
+  <meta name="author" content="Harry Winter">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+  <link rel="canonical" href="https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/">
+  <link rel="alternate" hreflang="en-GB" href="https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/">
+  <link rel="alternate" hreflang="x-default" href="https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/">
+  <link rel="me" href="https://www.linkedin.com/in/harry-p-winter">
+  <link rel="me" href="https://github.com/harrywinter06-code">
+  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
+
+  <meta property="og:site_name" content="Harry Winter">
+  <meta property="og:locale" content="en_GB">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A 10% Funding-Rate Backtest That Loses Money | Harry Winter">
+  <meta property="og:description" content="Harry Winter&#x27;s Hyperliquid funding-rate backtest made +10% a year out-of-sample, then turned deeply negative once realistic trading costs were added.">
+  <meta property="og:url" content="https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/">
+  <meta property="og:image" content="https://harrywinter06-code.github.io/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Harry Winter: UCL student building trading systems and LLM tooling, London">
+  
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A 10% Funding-Rate Backtest That Loses Money | Harry Winter">
+  <meta name="twitter:description" content="Harry Winter&#x27;s Hyperliquid funding-rate backtest made +10% a year out-of-sample, then turned deeply negative once realistic trading costs were added.">
+  <meta name="twitter:image" content="https://harrywinter06-code.github.io/og-image.jpg">
+
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/style.css">
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://harrywinter06-code.github.io/#website",
+      "url": "https://harrywinter06-code.github.io/",
+      "name": "Harry Winter",
+      "alternateName": [
+        "Harry P. Winter",
+        "Harry Winter portfolio"
+      ],
+      "description": "Personal website and portfolio of Harry Winter, a UCL student in London.",
+      "inLanguage": "en-GB",
+      "publisher": {
+        "@id": "https://harrywinter06-code.github.io/#person"
+      },
+      "author": {
+        "@id": "https://harrywinter06-code.github.io/#person"
+      }
+    },
+    {
+      "@type": "BlogPosting",
+      "@id": "https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/#article",
+      "mainEntityOfPage": "https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/",
+      "url": "https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/",
+      "headline": "My 10% funding-rate strategy loses money after trading costs",
+      "description": "Harry Winter's Hyperliquid funding-rate backtest made +10% a year out-of-sample, then turned deeply negative once realistic trading costs were added.",
+      "datePublished": "2026-11-01T09:00:00+00:00",
+      "dateModified": "2026-11-01T09:00:00+00:00",
+      "author": {
+        "@id": "https://harrywinter06-code.github.io/#person"
+      },
+      "publisher": {
+        "@id": "https://harrywinter06-code.github.io/#person"
+      },
+      "image": "https://harrywinter06-code.github.io/og-image.jpg",
+      "inLanguage": "en-GB",
+      "wordCount": 345,
+      "isPartOf": {
+        "@id": "https://harrywinter06-code.github.io/#website"
+      },
+      "about": {
+        "@id": "https://harrywinter06-code.github.io/projects/polymarket-edge/#code"
+      },
+      "citation": "https://github.com/harrywinter06-code/polymarket-edge"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Harry Winter",
+          "item": "https://harrywinter06-code.github.io/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Writing",
+          "item": "https://harrywinter06-code.github.io/#writing"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "My 10% funding-rate strategy loses money after trading costs",
+          "item": "https://harrywinter06-code.github.io/writing/funding-rate-strategy-trading-costs/"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://harrywinter06-code.github.io/#person",
+      "name": "Harry Winter",
+      "url": "https://harrywinter06-code.github.io/",
+      "image": {
+        "@type": "ImageObject",
+        "@id": "https://harrywinter06-code.github.io/#photo",
+        "url": "https://harrywinter06-code.github.io/harry-winter.jpg",
+        "contentUrl": "https://harrywinter06-code.github.io/harry-winter.jpg",
+        "name": "Harry Winter",
+        "caption": "Harry Winter, Information Management for Business student at UCL, London",
+        "description": "Photo of Harry Winter (Harry P. Winter), UCL student in London",
+        "creditText": "Harry Winter",
+        "copyrightNotice": "© Harry Winter",
+        "representativeOfPage": true,
+        "width": 360,
+        "height": 360
+      },
+      "sameAs": [
+        "https://www.linkedin.com/in/harry-p-winter",
+        "https://github.com/harrywinter06-code"
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="/">Harry Winter</a>
+      <nav aria-label="Main">
+        <a href="/#projects">Projects</a>
+        <a class="hide-sm" href="/#writing">Writing</a>
+        <a class="hide-sm" href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="wrap narrow">
+      <p class="crumb"><a href="/">&larr; Back to Harry Winter</a></p>
+      <header class="phead">
+        <h1>My 10% funding-rate strategy loses money after trading costs</h1>
+        <p class="meta"><img class="avatar" src="/harry-winter.jpg" alt="Harry Winter" width="28" height="28">By <a href="/" rel="author">Harry Winter</a> · <time datetime="2026-11-01">1 November 2026</time> · From the <a href="/projects/polymarket-edge/">polymarket-edge</a> project</p>
+        <p class="lede">A Hyperliquid funding strategy made +10% a year out-of-sample and was positive in every test window. With realistic trading costs and 8-hourly rebalancing it lost 207% a year. Here's what made it work again.</p>
+      </header>
+      <article class="article">
+        <p>On crypto perpetual futures exchanges like Hyperliquid, traders on one side pay the other a &ldquo;funding rate&rdquo; every hour. When it&rsquo;s positive, people who are short get paid. So a simple idea: short the coins with the highest funding, hedge the price risk, and collect the payments.</p>
+        <p>I backtested this as part of <a href="/projects/polymarket-edge/">polymarket-edge</a> on 12 major coins over a year of hourly data: 105,120 funding ticks.</p>
+        <h3>The headline looked great</h3>
+        <p>Every 8 hours, the strategy ranks coins by their average funding over the last day and shorts the top 5. Before costs:</p>
+        <ul>
+          <li><strong>+11.09%</strong> a year in-sample and <strong>+10.06%</strong> out-of-sample, so very little decay</li>
+          <li>Positive in <strong>20 of 20</strong> walk-forward test windows</li>
+          <li>A block-bootstrap 95% confidence interval of <strong>+9.78% to +13.59%</strong>, comfortably above zero</li>
+        </ul>
+        <p>I used a block bootstrap rather than a plain one because funding payments are autocorrelated. The plain version gave a much tighter, over-confident interval.</p>
+        <h3>Then I added trading costs</h3>
+        <p>Rebalancing means trading the short and its hedge each time. At a realistic 5 basis points per leg, rebalancing every 8 hours turns +10% into <strong>&minus;207% a year</strong>. The costs are paid three times a day; the funding edge isn&rsquo;t big enough to cover them.</p>
+        <p>The fix is to trade less. Rebalancing every two weeks brings it back to <strong>+3.85%</strong> a year after costs, and monthly gives <strong>+4.87%</strong>. The edge is real, but small, and it only survives if you&rsquo;re patient.</p>
+        <h3>Things that didn&rsquo;t hold up</h3>
+        <ul>
+          <li>&ldquo;20 of 20 windows&rdquo; overstates it. The test windows overlap, so it&rsquo;s closer to 10 independent tests.</li>
+          <li>About 7.7 percentage points of the return is just the baseline funding rate any short collects. Picking coins only added about 3.8 points.</li>
+          <li>Ranking coins by how fast funding was <em>rising</em> instead of how high it was did worse: +8.0% versus +17.2% on the same data.</li>
+        </ul>
+        <h3>What I took from it</h3>
+        <p>A backtest without costs tells you whether a signal exists, not whether you can make money from it. Most of the useful work here was finding out why the good-looking number was wrong. The code is on <a href="https://github.com/harrywinter06-code/polymarket-edge">GitHub</a>.</p>
+        <p class="btns" style="margin-top:32px"><a class="btn solid" href="https://www.linkedin.com/in/harry-p-winter" rel="me"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>Connect on LinkedIn</a><a class="btn" href="/projects/polymarket-edge/">About the project</a></p>
+      </article>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Harry Winter (Harry P. Winter) · London · Last updated <time datetime="2026-11-01">1 November 2026</time></span>
+      <span><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">Email</a></span>
+    </div>
+  </footer>
+</body>
+</html>
