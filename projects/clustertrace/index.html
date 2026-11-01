@@ -13,8 +13,8 @@
   <link rel="alternate" hreflang="x-default" href="https://harrywinter06-code.github.io/projects/clustertrace/">
   <link rel="me" href="https://www.linkedin.com/in/harry-p-winter">
   <link rel="me" href="https://github.com/harrywinter06-code">
-  <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
 
   <meta property="og:site_name" content="Harry Winter">
   <meta property="og:locale" content="en_GB">
@@ -41,7 +41,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css">
 
   <script type="application/ld+json">
@@ -143,64 +143,100 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <div class="top"><a href="/">&larr; Harry Winter</a></div>
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="/">Harry Winter</a>
+      <nav aria-label="Main">
+        <a href="/#projects">Projects</a>
+        <a class="hide-sm" href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
 
   <main id="main">
-    <article class="article">
-      <h1>clustertrace</h1>
-      <p class="meta sans">By <a href="/" rel="author">Harry Winter</a> · Python · <a href="https://github.com/harrywinter06-code/clustertrace">Source on GitHub</a></p>
-      <p class="lede">A debugger for LLM agents that runs on your own machine. Instead of reading traces one at a time, it groups runs by what the agent actually did, so you can see which patterns fail.</p>
+    <div class="wrap narrow">
+      <p class="crumb"><a href="/">&larr; Back to Harry Winter</a></p>
+      <header class="phead">
+        <h1>clustertrace</h1>
+        <p class="meta">A project by <a href="/" rel="author">Harry Winter</a> · Python · <a href="https://github.com/harrywinter06-code/clustertrace">Source code on GitHub</a></p>
+        <p class="lede">A debugger for LLM agents that runs on your own machine. Instead of reading traces one at a time, it groups runs by what the agent actually did, so you can see which patterns fail.</p>
+        <div class="stats">
+          <div><div class="stat">83%</div><div class="stat-label">of demo failures in just 2 clusters</div></div>
+          <div><div class="stat">~35µs</div><div class="stat-label">tracing overhead per call</div></div>
+          <div><div class="stat">6</div><div class="stat-label">MCP tools for coding assistants</div></div>
+        </div>
+      </header>
 
-      <h3>Why I built it</h3>
-      <p>A multi-step agent I was working on failed roughly 20% of the time, and reading individual traces didn&rsquo;t explain why. Clustering runs by their execution signature made the failure modes obvious.</p>
+      <article class="article">
+        <h3>Why I built it</h3>
+        <p>A multi-step agent I was working on failed roughly 20% of the time, and reading individual traces didn&rsquo;t explain why. Clustering runs by their execution signature made the failure modes obvious.</p>
 
-      <h3>How it works</h3>
-      <ul>
-        <li>Traces are stored locally in SQLite with FTS5 full-text search.</li>
-        <li>Each run gets a signature from its normalised, run-length-collapsed span sequence; runs with the same signature form a cluster.</li>
-        <li>The cluster view shows count, failure rate, a sample trace, the longest common failure prefix and the top failing nodes.</li>
-        <li>A local dashboard on <code>localhost:7777</code> has trace, cluster, search, metrics, failure and per-trace Gantt views.</li>
-      </ul>
+        <h3>How it works</h3>
+        <ul>
+          <li>Traces are stored locally in SQLite with FTS5 full-text search.</li>
+          <li>Each run gets a signature from its normalised, run-length-collapsed span sequence; runs with the same signature form a cluster.</li>
+          <li>The cluster view shows count, failure rate, a sample trace, the longest common failure prefix and the top failing nodes.</li>
+          <li>A local dashboard on <code>localhost:7777</code> has trace, cluster, search, metrics, failure and per-trace Gantt views.</li>
+        </ul>
 
-      <h3>Three ways to capture traces</h3>
-      <ol>
-        <li><strong>Decorators and helpers</strong> (<code>@clustertrace.trace</code>, <code>span</code>, <code>tool_call</code>): async-safe, nested via <code>contextvars</code>.</li>
-        <li><strong>SDK wrappers</strong> for Anthropic (including Bedrock and Vertex clients) and OpenAI, with no global monkey-patching.</li>
-        <li><strong>OpenTelemetry</strong>: an OTLP receiver (JSON and protobuf) and a span exporter that maps <code>gen_ai.*</code> attributes.</li>
-      </ol>
+        <h3>Three ways to capture traces</h3>
+        <ol>
+          <li><strong>Decorators and helpers</strong> (<code>@clustertrace.trace</code>, <code>span</code>, <code>tool_call</code>): async-safe, nested via <code>contextvars</code>.</li>
+          <li><strong>SDK wrappers</strong> for Anthropic (including Bedrock and Vertex clients) and OpenAI, with no global monkey-patching.</li>
+          <li><strong>OpenTelemetry</strong>: an OTLP receiver (JSON and protobuf) and a span exporter that maps <code>gen_ai.*</code> attributes.</li>
+        </ol>
 
-      <h3>Extras</h3>
-      <ul>
-        <li>An MCP server with six read-only tools so coding assistants can query failures directly.</li>
-        <li>Prompt analysis comparing prompts from successful and dead-ended sessions, plus a prompt linter.</li>
-        <li>A Claude Code integration via a SessionStart hook and OTLP.</li>
-        <li>Sampling and skip options for production use.</li>
-      </ul>
+        <h3>Extras</h3>
+        <ul>
+          <li>An MCP server with six read-only tools so coding assistants can query failures directly.</li>
+          <li>Prompt analysis comparing prompts from successful and dead-ended sessions, plus a prompt linter.</li>
+          <li>A Claude Code integration via a SessionStart hook and OTLP.</li>
+          <li>Sampling and skip options for production use.</li>
+        </ul>
 
-      <h3>Results</h3>
-      <ul>
-        <li>In the bundled 60-trace demo, two clusters cover 10 of 12 failures (83%) across 18 distinct execution patterns.</li>
-        <li>Decorator overhead is about 35&nbsp;&micro;s; the SQLite write dominates at about 5&nbsp;ms on Linux/macOS.</li>
-        <li>The demo runs with no API spend: <code>pip install clustertrace</code> then <code>clustertrace demo</code>.</li>
-      </ul>
+        <h3>Results</h3>
+        <ul>
+          <li>In the bundled 60-trace demo, two clusters cover 10 of 12 failures (83%) across 18 distinct execution patterns.</li>
+          <li>Decorator overhead is about 35&nbsp;&micro;s; the SQLite write dominates at about 5&nbsp;ms on Linux/macOS.</li>
+          <li>The demo runs with no API spend: <code>pip install clustertrace</code> then <code>clustertrace demo</code>.</li>
+        </ul>
 
-      <h3>Built with</h3>
-      <p class="dim">Python, SQLite (FTS5), OpenTelemetry, Anthropic SDK, OpenAI SDK, Model Context Protocol, TypeScript.</p>
-    </article>
+        <h3>Built with</h3>
+        <p>Python, SQLite (FTS5), OpenTelemetry, Anthropic SDK, OpenAI SDK, Model Context Protocol, TypeScript.</p>
+        <p class="btns" style="margin-top:28px"><a class="btn solid" href="https://github.com/harrywinter06-code/clustertrace"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>View the code</a><a class="btn" href="https://www.linkedin.com/in/harry-p-winter" rel="me"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>Connect on LinkedIn</a></p>
+      </article>
+    </div>
 
-    <section aria-labelledby="more">
-      <h2 id="more" class="sans">Other projects by Harry Winter</h2>
-      <ul class="plain">
-        <li><a href="/projects/trading-system/">Autonomous Trading System</a></li>
-        <li><a href="/projects/polymarket-edge/">polymarket-edge</a></li>
-        <li><a href="/projects/gina-starter-pack/">gina-starter-pack</a></li>
-      </ul>
+    <section class="block" aria-labelledby="more-h">
+      <div class="wrap">
+        <h2 id="more-h">Other projects by Harry Winter</h2>
+        <div class="grid">
+        <a class="card" href="/projects/trading-system/">
+          <h3>Autonomous Trading System<span class="lang">Python</span></h3>
+          <p>Evolves trading strategies with a genetic algorithm, tests them on data they haven't seen, and paper-trades the winner on Alpaca every weekday morning. It shuts itself down if it loses 5% in a day.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/polymarket-edge/">
+          <h3>polymarket-edge<span class="lang">Python</span></h3>
+          <p>Research on prediction-market arbitrage and crypto funding rates. The most useful result was a negative one: a strategy making about 10% a year before costs loses money once realistic fees are added.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/gina-starter-pack/">
+          <h3>gina-starter-pack<span class="lang">TypeScript</span></h3>
+          <p>Three Polymarket strategies packaged as scheduled workflows. I tested one of them properly and then labelled it research only, because the edge wasn't real.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="page-footer">
-    <p>Harry Winter (Harry P. Winter) · London</p>
-    <p><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">harrywinter.uk@gmail.com</a></p>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Harry Winter (Harry P. Winter) · London</span>
+      <span><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">Email</a></span>
+    </div>
   </footer>
 </body>
 </html>

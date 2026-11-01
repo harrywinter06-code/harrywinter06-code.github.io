@@ -13,8 +13,8 @@
   <link rel="alternate" hreflang="x-default" href="https://harrywinter06-code.github.io/projects/gina-starter-pack/">
   <link rel="me" href="https://www.linkedin.com/in/harry-p-winter">
   <link rel="me" href="https://github.com/harrywinter06-code">
-  <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
 
   <meta property="og:site_name" content="Harry Winter">
   <meta property="og:locale" content="en_GB">
@@ -41,7 +41,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css">
 
   <script type="application/ld+json">
@@ -143,50 +143,86 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <div class="top"><a href="/">&larr; Harry Winter</a></div>
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="/">Harry Winter</a>
+      <nav aria-label="Main">
+        <a href="/#projects">Projects</a>
+        <a class="hide-sm" href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
 
   <main id="main">
-    <article class="article">
-      <h1>gina-starter-pack</h1>
-      <p class="meta sans">By <a href="/" rel="author">Harry Winter</a> · TypeScript · <a href="https://github.com/harrywinter06-code/gina-starter-pack">Source on GitHub</a></p>
-      <p class="lede">Three Polymarket negRisk strategy packs built as scheduled workflows for Ask Gina&rsquo;s Predictions vertical. Each pack is a pipeline of scanners feeding a risk-gated executor that defaults to dry-run.</p>
+    <div class="wrap narrow">
+      <p class="crumb"><a href="/">&larr; Back to Harry Winter</a></p>
+      <header class="phead">
+        <h1>gina-starter-pack</h1>
+        <p class="meta">A project by <a href="/" rel="author">Harry Winter</a> · TypeScript · <a href="https://github.com/harrywinter06-code/gina-starter-pack">Source code on GitHub</a></p>
+        <p class="lede">Three Polymarket negRisk strategy packs built as scheduled workflows for Ask Gina&rsquo;s Predictions vertical. Each pack is a pipeline of scanners feeding a risk-gated executor that defaults to dry-run.</p>
+        <div class="stats">
+          <div><div class="stat">7</div><div class="stat-label">validation passes on Pack 1</div></div>
+          <div><div class="stat">215</div><div class="stat-label">resolved events backtested</div></div>
+          <div><div class="stat">3</div><div class="stat-label">strategy packs</div></div>
+        </div>
+      </header>
 
-      <h3>Pack 1: negRisk basket arbitrage (three layers)</h3>
-      <ol>
-        <li><strong>Scanner</strong>: checks the sum-of-YES invariant and depth-walks each flagged event at $50, $500 and $5,000, classifying gaps as real, marginal or trap.</li>
-        <li><strong>Volume-tier filter</strong>: groups events into flagship (&ge;$1M), mid and tail tiers by dollar volume.</li>
-        <li><strong>Maker executor</strong>: a risk gate (capital, position count, daily notional, daily-loss kill-switch) then maker-only limit orders, with basket convergence monitoring.</li>
-      </ol>
+      <article class="article">
+        <h3>Pack 1: negRisk basket arbitrage (three layers)</h3>
+        <ol>
+          <li><strong>Scanner</strong>: checks the sum-of-YES invariant and depth-walks each flagged event at $50, $500 and $5,000, classifying gaps as real, marginal or trap.</li>
+          <li><strong>Volume-tier filter</strong>: groups events into flagship (&ge;$1M), mid and tail tiers by dollar volume.</li>
+          <li><strong>Maker executor</strong>: a risk gate (capital, position count, daily notional, daily-loss kill-switch) then maker-only limit orders, with basket convergence monitoring.</li>
+        </ol>
 
-      <h3>Pack 2 and Pack 3</h3>
-      <ul>
-        <li><strong>Maker yield</strong>: a scanner that models yield under naive, moderate and informed adverse selection, feeding a two-sided quoting executor.</li>
-        <li><strong>Favourite-longshot bias</strong>: a research study backtested on 215 resolved events and 3,319 constituents. No statistically significant edge survived, so it is marked research and dry-run only.</li>
-      </ul>
+        <h3>Pack 2 and Pack 3</h3>
+        <ul>
+          <li><strong>Maker yield</strong>: a scanner that models yield under naive, moderate and informed adverse selection, feeding a two-sided quoting executor.</li>
+          <li><strong>Favourite-longshot bias</strong>: a research study backtested on 215 resolved events and 3,319 constituents. No statistically significant edge survived, so it is marked research and dry-run only.</li>
+        </ul>
 
-      <h3>Testing</h3>
-      <p>Pack 1 went through seven validation passes, including an adversarial red-team that found and fixed a SQL-injection bug, a live end-to-end run, and a pre-send sweep of the executor. The risk gate blocked all six deliberate bypass attempts in Pack 3.</p>
+        <h3>Testing</h3>
+        <p>Pack 1 went through seven validation passes, including an adversarial red-team that found and fixed a SQL-injection bug, a live end-to-end run, and a pre-send sweep of the executor. The risk gate blocked all six deliberate bypass attempts in Pack 3.</p>
 
-      <h3>Why maker-only</h3>
-      <p>Depth-walking showed that a +300bp top-of-book gap shrank to +60bp at realistic size, and taker-side P&amp;L per cycle was negative. Only passive, maker-side execution made economic sense.</p>
+        <h3>Why maker-only</h3>
+        <p>Depth-walking showed that a +300bp top-of-book gap shrank to +60bp at realistic size, and taker-side P&amp;L per cycle was negative. Only passive, maker-side execution made economic sense.</p>
 
-      <h3>Built with</h3>
-      <p class="dim">TypeScript, Ask Gina workflow runtime, SQLite, Python, Polymarket CLOB API.</p>
-    </article>
+        <h3>Built with</h3>
+        <p>TypeScript, Ask Gina workflow runtime, SQLite, Python, Polymarket CLOB API.</p>
+        <p class="btns" style="margin-top:28px"><a class="btn solid" href="https://github.com/harrywinter06-code/gina-starter-pack"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>View the code</a><a class="btn" href="https://www.linkedin.com/in/harry-p-winter" rel="me"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>Connect on LinkedIn</a></p>
+      </article>
+    </div>
 
-    <section aria-labelledby="more">
-      <h2 id="more" class="sans">Other projects by Harry Winter</h2>
-      <ul class="plain">
-        <li><a href="/projects/trading-system/">Autonomous Trading System</a></li>
-        <li><a href="/projects/clustertrace/">clustertrace</a></li>
-        <li><a href="/projects/polymarket-edge/">polymarket-edge</a></li>
-      </ul>
+    <section class="block" aria-labelledby="more-h">
+      <div class="wrap">
+        <h2 id="more-h">Other projects by Harry Winter</h2>
+        <div class="grid">
+        <a class="card" href="/projects/trading-system/">
+          <h3>Autonomous Trading System<span class="lang">Python</span></h3>
+          <p>Evolves trading strategies with a genetic algorithm, tests them on data they haven't seen, and paper-trades the winner on Alpaca every weekday morning. It shuts itself down if it loses 5% in a day.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/clustertrace/">
+          <h3>clustertrace<span class="lang">Python</span></h3>
+          <p>A debugger for LLM agents that groups runs by what they actually did, so you can see which patterns fail. I built it after an agent of mine failed one run in five and I couldn't work out why.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/polymarket-edge/">
+          <h3>polymarket-edge<span class="lang">Python</span></h3>
+          <p>Research on prediction-market arbitrage and crypto funding rates. The most useful result was a negative one: a strategy making about 10% a year before costs loses money once realistic fees are added.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="page-footer">
-    <p>Harry Winter (Harry P. Winter) · London</p>
-    <p><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">harrywinter.uk@gmail.com</a></p>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Harry Winter (Harry P. Winter) · London</span>
+      <span><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">Email</a></span>
+    </div>
   </footer>
 </body>
 </html>

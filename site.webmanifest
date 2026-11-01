@@ -3,8 +3,8 @@
   "short_name": "Harry Winter",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fbfaf6",
-  "theme_color": "#fbfaf6",
+  "background_color": "#f6f4ef",
+  "theme_color": "#1f5c4a",
   "icons": [
     {
       "src": "/icon-192.png",

@@ -13,8 +13,8 @@
   <link rel="alternate" hreflang="x-default" href="https://harrywinter06-code.github.io/projects/polymarket-edge/">
   <link rel="me" href="https://www.linkedin.com/in/harry-p-winter">
   <link rel="me" href="https://github.com/harrywinter06-code">
-  <meta name="theme-color" content="#171717" media="(prefers-color-scheme: dark)">
-  <meta name="theme-color" content="#fbfaf6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#121614" media="(prefers-color-scheme: dark)">
+  <meta name="theme-color" content="#f6f4ef" media="(prefers-color-scheme: light)">
 
   <meta property="og:site_name" content="Harry Winter">
   <meta property="og:locale" content="en_GB">
@@ -41,7 +41,7 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/style.css">
 
   <script type="application/ld+json">
@@ -143,55 +143,91 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <div class="top"><a href="/">&larr; Harry Winter</a></div>
+  <header class="bar">
+    <div class="wrap">
+      <a class="brand" href="/">Harry Winter</a>
+      <nav aria-label="Main">
+        <a href="/#projects">Projects</a>
+        <a class="hide-sm" href="/#about">About</a>
+        <a href="/#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
 
   <main id="main">
-    <article class="article">
-      <h1>polymarket-edge</h1>
-      <p class="meta sans">By <a href="/" rel="author">Harry Winter</a> · Python · <a href="https://github.com/harrywinter06-code/polymarket-edge">Source on GitHub</a></p>
-      <p class="lede">A Python research toolkit with two parts: a scanner that looks for arbitrage in Polymarket&rsquo;s multi-outcome markets, and a backtest of collecting funding payments on Hyperliquid. I&rsquo;ve written up the results that didn&rsquo;t work as well as the ones that did.</p>
+    <div class="wrap narrow">
+      <p class="crumb"><a href="/">&larr; Back to Harry Winter</a></p>
+      <header class="phead">
+        <h1>polymarket-edge</h1>
+        <p class="meta">A project by <a href="/" rel="author">Harry Winter</a> · Python · <a href="https://github.com/harrywinter06-code/polymarket-edge">Source code on GitHub</a></p>
+        <p class="lede">A Python research toolkit with two parts: a scanner that looks for arbitrage in Polymarket&rsquo;s multi-outcome markets, and a backtest of collecting funding payments on Hyperliquid. I&rsquo;ve written up the results that didn&rsquo;t work as well as the ones that did.</p>
+        <div class="stats">
+          <div><div class="stat">105,120</div><div class="stat-label">hourly funding ticks analysed</div></div>
+          <div><div class="stat">500</div><div class="stat-label">Polymarket events scanned</div></div>
+          <div><div class="stat">~92%</div><div class="stat-label">test coverage</div></div>
+        </div>
+      </header>
 
-      <h3>Polymarket negRisk scanner</h3>
-      <p>In an event with N mutually exclusive outcomes, the YES prices should sum to 1.0. The scanner flags events where the sum deviates by more than a fee buffer, then walks each market&rsquo;s full order book to check whether the gap survives at $50 and $500 per market.</p>
-      <p>Of 500 active events scanned, 19 were flagged at a 50bp buffer: 2 real, 5 marginal and 12 traps. By count, 63% were traps; by dollar volume, just 0.012%, because the 2026 FIFA World Cup event carried 95.9% of flagged volume. So whether it looks like a real opportunity depends entirely on how you count.</p>
+      <article class="article">
+        <h3>Polymarket negRisk scanner</h3>
+        <p>In an event with N mutually exclusive outcomes, the YES prices should sum to 1.0. The scanner flags events where the sum deviates by more than a fee buffer, then walks each market&rsquo;s full order book to check whether the gap survives at $50 and $500 per market.</p>
+        <p>Of 500 active events scanned, 19 were flagged at a 50bp buffer: 2 real, 5 marginal and 12 traps. By count, 63% were traps; by dollar volume, just 0.012%, because the 2026 FIFA World Cup event carried 95.9% of flagged volume. So whether it looks like a real opportunity depends entirely on how you count.</p>
 
-      <h3>Hyperliquid funding-capture backtest</h3>
-      <p>Across 12 major coins, 365 days and 105,120 hourly ticks, the strategy shorts the top-K coins by trailing funding and collects funding over the next interval. Gross out-of-sample return was +10.06% annualised, positive in 20 of 20 walk-forward windows, with a block-bootstrap 95% CI of +9.78% to +13.59%.</p>
-      <p>Trading costs kill it, though: at 5bp per leg, an 8-hour rebalance turns deeply negative. Only rebalancing every two weeks or less often stays positive after costs (+3.85% to +4.87% annualised).</p>
+        <h3>Hyperliquid funding-capture backtest</h3>
+        <p>Across 12 major coins, 365 days and 105,120 hourly ticks, the strategy shorts the top-K coins by trailing funding and collects funding over the next interval. Gross out-of-sample return was +10.06% annualised, positive in 20 of 20 walk-forward windows, with a block-bootstrap 95% CI of +9.78% to +13.59%.</p>
+        <p>Trading costs kill it, though: at 5bp per leg, an 8-hour rebalance turns deeply negative. Only rebalancing every two weeks or less often stays positive after costs (+3.85% to +4.87% annualised).</p>
 
-      <h3>Methods</h3>
-      <ul>
-        <li>Walk-forward validation (60-day train, 30-day test, 14-day step)</li>
-        <li>IID and stationary block bootstrap confidence intervals (IID is too narrow because funding returns are autocorrelated)</li>
-        <li>Tail-risk reporting: VaR, Expected Shortfall and drawdown</li>
-        <li>A market-maker simulator with three adverse-selection scenarios</li>
-        <li>A cross-venue lead-lag study (reported honestly as a null result after Bonferroni correction)</li>
-      </ul>
+        <h3>Methods</h3>
+        <ul>
+          <li>Walk-forward validation (60-day train, 30-day test, 14-day step)</li>
+          <li>IID and stationary block bootstrap confidence intervals (IID is too narrow because funding returns are autocorrelated)</li>
+          <li>Tail-risk reporting: VaR, Expected Shortfall and drawdown</li>
+          <li>A market-maker simulator with three adverse-selection scenarios</li>
+          <li>A cross-venue lead-lag study (reported honestly as a null result after Bonferroni correction)</li>
+        </ul>
 
-      <h3>Engineering</h3>
-      <ul>
-        <li>Python managed with <code>uv</code>, about 92% test coverage with pytest</li>
-        <li>SQLite in WAL mode; GitHub Actions CI plus a nightly data job that snapshots to a data branch</li>
-        <li>Generated reports, matplotlib charts and single-file HTML dashboards</li>
-      </ul>
+        <h3>Engineering</h3>
+        <ul>
+          <li>Python managed with <code>uv</code>, about 92% test coverage with pytest</li>
+          <li>SQLite in WAL mode; GitHub Actions CI plus a nightly data job that snapshots to a data branch</li>
+          <li>Generated reports, matplotlib charts and single-file HTML dashboards</li>
+        </ul>
 
-      <h3>Built with</h3>
-      <p class="dim">Python, uv, pytest, SQLite, matplotlib, GitHub Actions, Polymarket API, Hyperliquid API.</p>
-    </article>
+        <h3>Built with</h3>
+        <p>Python, uv, pytest, SQLite, matplotlib, GitHub Actions, Polymarket API, Hyperliquid API.</p>
+        <p class="btns" style="margin-top:28px"><a class="btn solid" href="https://github.com/harrywinter06-code/polymarket-edge"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.12.83-.26.83-.57L9 21.07c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.08-.74.09-.73.09-.73 1.2.09 1.83 1.24 1.83 1.24 1.07 1.83 2.81 1.3 3.5 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.14-.3-.54-1.52.1-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.64 1.66.24 2.88.12 3.18a4.65 4.65 0 0 1 1.23 3.22c0 4.61-2.8 5.63-5.48 5.92.42.36.81 1.1.81 2.22l-.01 3.29c0 .31.2.69.82.57A12 12 0 0 0 12 .3"/></svg>View the code</a><a class="btn" href="https://www.linkedin.com/in/harry-p-winter" rel="me"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>Connect on LinkedIn</a></p>
+      </article>
+    </div>
 
-    <section aria-labelledby="more">
-      <h2 id="more" class="sans">Other projects by Harry Winter</h2>
-      <ul class="plain">
-        <li><a href="/projects/trading-system/">Autonomous Trading System</a></li>
-        <li><a href="/projects/clustertrace/">clustertrace</a></li>
-        <li><a href="/projects/gina-starter-pack/">gina-starter-pack</a></li>
-      </ul>
+    <section class="block" aria-labelledby="more-h">
+      <div class="wrap">
+        <h2 id="more-h">Other projects by Harry Winter</h2>
+        <div class="grid">
+        <a class="card" href="/projects/trading-system/">
+          <h3>Autonomous Trading System<span class="lang">Python</span></h3>
+          <p>Evolves trading strategies with a genetic algorithm, tests them on data they haven't seen, and paper-trades the winner on Alpaca every weekday morning. It shuts itself down if it loses 5% in a day.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/clustertrace/">
+          <h3>clustertrace<span class="lang">Python</span></h3>
+          <p>A debugger for LLM agents that groups runs by what they actually did, so you can see which patterns fail. I built it after an agent of mine failed one run in five and I couldn't work out why.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        <a class="card" href="/projects/gina-starter-pack/">
+          <h3>gina-starter-pack<span class="lang">TypeScript</span></h3>
+          <p>Three Polymarket strategies packaged as scheduled workflows. I tested one of them properly and then labelled it research only, because the edge wasn't real.</p>
+          <span class="more">Read more &rarr;</span>
+        </a>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="page-footer">
-    <p>Harry Winter (Harry P. Winter) · London</p>
-    <p><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">harrywinter.uk@gmail.com</a></p>
+  <footer>
+    <div class="wrap">
+      <span>© 2026 Harry Winter (Harry P. Winter) · London</span>
+      <span><a href="https://www.linkedin.com/in/harry-p-winter" rel="me">LinkedIn</a> · <a href="https://github.com/harrywinter06-code" rel="me">GitHub</a> · <a href="mailto:harrywinter.uk@gmail.com">Email</a></span>
+    </div>
   </footer>
 </body>
 </html>
