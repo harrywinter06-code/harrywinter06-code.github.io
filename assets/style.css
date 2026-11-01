@@ -232,6 +232,7 @@
     .side .btn { width: 100%; justify-content: center; }
     .more { border-top: 1px solid var(--border); padding: 72px 0 96px; }
     .more .projects .card { grid-column: span 2; }
+    .card.full { grid-column: span 6; }
     .card .go { margin-top: 18px; font-size: 13px; color: var(--accent); }
     @media (max-width: 860px) {
       .article { grid-template-columns: 1fr; gap: 40px; }
