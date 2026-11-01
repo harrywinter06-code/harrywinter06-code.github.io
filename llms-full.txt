@@ -1,0 +1,175 @@
+# Harry Winter: full site text
+
+Last updated: 1 November 2026
+
+## Quick facts
+
+### Who is Harry Winter?
+
+Harry Winter (Harry P. Winter) is a second-year Information Management for Business student at University College London (UCL), based in London, UK. He builds software projects in Python, SQL and TypeScript, focused on algorithmic trading, prediction markets and tools for debugging AI agents.
+
+### What does Harry Winter study?
+
+Harry Winter studies BSc Information Management for Business at University College London (UCL), where he is on track for a First.
+
+### What projects has Harry Winter built?
+
+Harry Winter's projects include an autonomous algorithmic trading system that evolves strategies with a genetic algorithm and paper-trades on Alpaca; polymarket-edge, a Polymarket and Hyperliquid market research toolkit; clustertrace, an open-source debugger for LLM agents published on PyPI; and gina-starter-pack, a set of Polymarket strategy workflows.
+
+### Is Harry Winter looking for work?
+
+Yes. Harry Winter is looking for internships and placements in London in data, quantitative finance or AI tooling.
+
+### How can I contact Harry Winter?
+
+You can email Harry Winter at harrywinter.uk@gmail.com or connect with him on LinkedIn at linkedin.com/in/harry-p-winter. His code is on GitHub at github.com/harrywinter06-code.
+
+## Autonomous Trading System (by Harry Winter)
+
+URL: https://harrywinter06-code.github.io/projects/trading-system/
+Code: https://github.com/harrywinter06-code/Trading-system
+
+A Python pipeline that runs every weekday morning: it ingests market, macro and sentiment data, evolves trading strategies with a genetic algorithm, validates them out-of-sample, and executes on Alpaca paper trading behind hard circuit breakers.
+
+### The daily pipeline
+
+- Data ingestion: equity and ETF prices (SPY, QQQ, sector ETFs, GLD, TLT, BTC) from yfinance, macro indicators from FRED (Fed Funds Rate, CPI, unemployment, 10Y Treasury, yield spread), Reddit sentiment and alternative data.
+- Regime classification: labels the market as risk-on/risk-off and trending/mean-reverting, then adjusts signal weights and maximum position size.
+- Strategy tournament: an evolutionary algorithm backtests strategy “genomes”, ranks them by risk-adjusted return and promotes a champion.
+- Validation: the champion is tested walk-forward on out-of-sample windows before deployment. Overfitting is treated as an explicit design constraint.
+- Execution: orders go through the Alpaca paper-trading API, with circuit breakers able to halt everything.
+- Research loop: background agents fetch arXiv papers, scrape finance blogs and score sentiment, building a knowledge base that biases the next generation’s mutations.
+
+### Evolutionary strategy search
+
+Each strategy is a genome encoding signal weightings, entry/exit conditions and position sizing. Underperformers are culled; survivors are mutated and crossed over. A researcher agent uses the knowledge base built from papers and market commentary to steer the mutation operator.
+
+### Risk management
+
+- Halt on a daily loss above 5% of equity
+- Halt on portfolio drawdown above 20%
+- Maximum position size of 10% of equity per ticker
+- Halt after 14 days at a 0% win rate
+- On a trigger, all positions are closed, a HALT file is written and a Telegram alert is sent
+
+### Self-analysis and red-teaming
+
+A self-analysis agent reviews recent trades (including trades made in the wrong regime), and a red-team agent stress-tests the champion strategy against adversarial scenarios before it is trusted.
+
+### Architecture
+
+- data/: prices, macro, sentiment and alternative data
+- engine/: signals, regime classification, backtesting, portfolio and risk
+- strategies/: genome schema, evolutionary tournament and versioning
+- validation/: walk-forward out-of-sample testing
+- live/: position monitoring, circuit breakers and Alpaca execution
+- agents/: research, analysis and Telegram alerts
+- scheduler/: daily orchestration
+
+### Status
+
+Paper trading only. This is a research and engineering project, not financial advice, and it is not intended to trade live capital without extended paper-trading validation.
+
+Built with: Python, yfinance, FRED API, PRAW (Reddit), Alpaca API, Telegram, arXiv, pytest.
+
+## clustertrace (by Harry Winter)
+
+URL: https://harrywinter06-code.github.io/projects/clustertrace/
+Code: https://github.com/harrywinter06-code/clustertrace
+
+A debugger for LLM agents that runs on your own machine. Instead of reading traces one at a time, it groups runs by what the agent actually did, so you can see which patterns fail.
+
+### Why I built it
+
+A multi-step agent I was working on failed roughly 20% of the time, and reading individual traces didn’t explain why. Clustering runs by their execution signature made the failure modes obvious.
+
+### How it works
+
+- Traces are stored locally in SQLite with FTS5 full-text search.
+- Each run gets a signature from its normalised, run-length-collapsed span sequence; runs with the same signature form a cluster.
+- The cluster view shows count, failure rate, a sample trace, the longest common failure prefix and the top failing nodes.
+- A local dashboard on localhost:7777 has trace, cluster, search, metrics, failure and per-trace Gantt views.
+
+### Three ways to capture traces
+
+- Decorators and helpers (@clustertrace.trace, span, tool_call): async-safe, nested via contextvars.
+- SDK wrappers for Anthropic (including Bedrock and Vertex clients) and OpenAI, with no global monkey-patching.
+- OpenTelemetry: an OTLP receiver (JSON and protobuf) and a span exporter that maps gen_ai.* attributes.
+
+### Extras
+
+- An MCP server with six read-only tools so coding assistants can query failures directly.
+- Prompt analysis comparing prompts from successful and dead-ended sessions, plus a prompt linter.
+- A Claude Code integration via a SessionStart hook and OTLP.
+- Sampling and skip options for production use.
+
+### Results
+
+- In the bundled 60-trace demo, two clusters cover 10 of 12 failures (83%) across 18 distinct execution patterns.
+- Decorator overhead is about 35 µs; the SQLite write dominates at about 5 ms on Linux/macOS.
+- The demo runs with no API spend: pip install clustertrace then clustertrace demo.
+- It is published on PyPI under the MIT licence.
+
+Built with: Python, SQLite (FTS5), OpenTelemetry, Anthropic SDK, OpenAI SDK, Model Context Protocol, TypeScript.
+
+## polymarket-edge (by Harry Winter)
+
+URL: https://harrywinter06-code.github.io/projects/polymarket-edge/
+Code: https://github.com/harrywinter06-code/polymarket-edge
+
+A Python research toolkit with two parts: a scanner that looks for arbitrage in Polymarket’s multi-outcome markets, and a backtest of collecting funding payments on Hyperliquid. I’ve written up the results that didn’t work as well as the ones that did.
+
+### Polymarket negRisk scanner
+
+In an event with N mutually exclusive outcomes, the YES prices should sum to 1.0. The scanner flags events where the sum deviates by more than a fee buffer, then walks each market’s full order book to check whether the gap survives at $50 and $500 per market.
+Of 500 active events scanned, 19 were flagged at a 50bp buffer: 2 real, 5 marginal and 12 traps. By count, 63% were traps; by dollar volume, just 0.012%, because the 2026 FIFA World Cup event carried 95.9% of flagged volume. So whether it looks like a real opportunity depends entirely on how you count.
+
+### Hyperliquid funding-capture backtest
+
+Across 12 major coins, 365 days and 105,120 hourly ticks, the strategy shorts the top-K coins by trailing funding and collects funding over the next interval. Gross out-of-sample return was +10.06% annualised, positive in 20 of 20 walk-forward windows, with a block-bootstrap 95% CI of +9.78% to +13.59%.
+Trading costs kill it, though: at 5bp per leg, an 8-hour rebalance turns deeply negative. Only rebalancing every two weeks or less often stays positive after costs (+3.85% to +4.87% annualised).
+
+### Methods
+
+- Walk-forward validation (60-day train, 30-day test, 14-day step)
+- IID and stationary block bootstrap confidence intervals (IID is too narrow because funding returns are autocorrelated)
+- Tail-risk reporting: VaR, Expected Shortfall and drawdown
+- A market-maker simulator with three adverse-selection scenarios
+- A cross-venue lead-lag study (reported honestly as a null result after Bonferroni correction)
+
+### Engineering
+
+- Python managed with uv, about 92% test coverage with pytest
+- SQLite in WAL mode; GitHub Actions CI plus a nightly data job that snapshots to a data branch
+- Generated reports, matplotlib charts and single-file HTML dashboards
+
+Built with: Python, uv, pytest, SQLite, matplotlib, GitHub Actions, Polymarket API, Hyperliquid API.
+
+## gina-starter-pack (by Harry Winter)
+
+URL: https://harrywinter06-code.github.io/projects/gina-starter-pack/
+Code: https://github.com/harrywinter06-code/gina-starter-pack
+
+Three Polymarket negRisk strategy packs built as scheduled workflows for Ask Gina’s Predictions vertical. Each pack is a pipeline of scanners feeding a risk-gated executor that defaults to dry-run.
+
+### Pack 1: negRisk basket arbitrage (three layers)
+
+- Scanner: checks the sum-of-YES invariant and depth-walks each flagged event at $50, $500 and $5,000, classifying gaps as real, marginal or trap.
+- Volume-tier filter: groups events into flagship (≥$1M), mid and tail tiers by dollar volume.
+- Maker executor: a risk gate (capital, position count, daily notional, daily-loss kill-switch) then maker-only limit orders, with basket convergence monitoring.
+
+### Pack 2 and Pack 3
+
+- Maker yield: a scanner that models yield under naive, moderate and informed adverse selection, feeding a two-sided quoting executor.
+- Favourite-longshot bias: a research study backtested on 215 resolved events and 3,319 constituents. No statistically significant edge survived, so it is marked research and dry-run only.
+
+### Testing
+
+Pack 1 went through seven validation passes, including an adversarial red-team that found and fixed a SQL-injection bug, a live end-to-end run, and a pre-send sweep of the executor. The risk gate blocked all six deliberate bypass attempts in Pack 3.
+
+### Why maker-only
+
+Depth-walking showed that a +300bp top-of-book gap shrank to +60bp at realistic size, and taker-side P&L per cycle was negative. Only passive, maker-side execution made economic sense.
+
+Built with: TypeScript, Ask Gina workflow runtime, SQLite, Python, Polymarket CLOB API.
+
