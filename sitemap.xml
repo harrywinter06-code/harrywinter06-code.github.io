@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://harrywinter06-code.github.io/</loc><lastmod>2026-11-01</lastmod></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://harrywinter06-code.github.io/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>1.0</priority>
+    <image:image><image:loc>https://harrywinter06-code.github.io/harry-winter.jpg</image:loc><image:title>Harry Winter</image:title><image:caption>Harry Winter, UCL student, London</image:caption></image:image>
+  </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/projects/trading-system/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/projects/clustertrace/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/projects/polymarket-edge/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://harrywinter06-code.github.io/projects/gina-starter-pack/</loc>
+    <lastmod>2026-11-01</lastmod>
+    <priority>0.8</priority>
+  </url>
 </urlset>

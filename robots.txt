@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
+
 Sitemap: https://harrywinter06-code.github.io/sitemap.xml

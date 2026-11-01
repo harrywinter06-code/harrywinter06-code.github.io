@@ -1,0 +1,16 @@
+# Harry Winter
+
+> Information Management for Business student at UCL in London who builds algorithmic trading systems, prediction-market research tools and LLM agent tooling in Python. Also known as Harry P. Winter.
+
+- LinkedIn: https://www.linkedin.com/in/harry-p-winter
+- GitHub: https://github.com/harrywinter06-code
+- Email: harrywinter.uk@gmail.com
+- Location: London, United Kingdom
+- Education: BSc Information Management for Business, University College London (UCL)
+
+## Projects
+
+- [Autonomous Trading System](https://harrywinter06-code.github.io/projects/trading-system/): Harry Winter's autonomous trading pipeline in Python: evolutionary strategy search, regime classification, walk-forward validation and Alpaca paper trading.
+- [clustertrace](https://harrywinter06-code.github.io/projects/clustertrace/): clustertrace by Harry Winter: a local-first debugger that clusters LLM agent traces by execution pattern so failures surface. SQLite, OpenTelemetry, MCP.
+- [polymarket-edge](https://harrywinter06-code.github.io/projects/polymarket-edge/): Harry Winter's Polymarket negRisk arbitrage scanner and Hyperliquid funding backtest, with depth-aware fills, walk-forward tests and bootstrap CIs.
+- [gina-starter-pack](https://harrywinter06-code.github.io/projects/gina-starter-pack/): Harry Winter's three Polymarket negRisk strategy packs for Ask Gina: basket arbitrage, maker yield and a longshot-bias study, with risk-gated executors.
